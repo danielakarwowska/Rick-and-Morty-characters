@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useMemo, useState } from "react"
 import Table from './table'
-import { Input, Dropdown, Grid, Select } from 'semantic-ui-react'
+import { Input, Dropdown, Grid } from 'semantic-ui-react'
 import { Episode } from "../types"
 type Props = {
     episodes: Episode
@@ -11,12 +11,13 @@ const Navbar = ({ episodes }: Props) => {
         { key: 'Human', text: 'Human', value: 'Human' },
         { key: 'Alien', text: 'Alien', value: 'Alien' },
     ]
-    const [selectSpecies, setSelectSpecies] = useState()
+    const [selectSpecies, setSelectSpecies] = useState([])
     const [searchInput, setSearchInput] = useState('')
-const handlerSpeciesChange = (e) => {
-    setSelectSpecies(e.target.value)
-    console.log(e.target.value)
-}
+    
+    const handlerSpeciesChange = (e, data) => {
+        setSelectSpecies(data.value)
+        console.log(data.value)
+    }
     return (
         <div>
             <Grid>
@@ -25,17 +26,15 @@ const handlerSpeciesChange = (e) => {
                         onChange={(e) => setSearchInput(e.target.value)} />
                 </Grid.Column>
                 <Grid.Column width={4}>
-                    <select onChange={handlerSpeciesChange}>
-                        <option value='Species'>Species</option>
-                        <option value='Human'>Human</option>
-                        <option value='Alien'>Alien</option>
-                    </select>
-                    {/* <Select onChange={handlerSpeciesChange} placeholder="Species"search selection options={option}/> */}
+                    <Dropdown onChange={handlerSpeciesChange} placeholder="Species"search selection 
+                    options={option}/>
                 </Grid.Column>
             </Grid>
             <Table
                 episodes={episodes}
-                searchInput={searchInput} />
+                searchInput={searchInput}
+                selectSpecies={selectSpecies}
+                 />
         </div>
     )
 }

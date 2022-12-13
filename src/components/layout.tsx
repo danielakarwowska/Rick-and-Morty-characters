@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 
 
 type Props = {
-    children: ReactNode
+    children: ReactNode 
 }
 const Layout = ({children}: Props) => {
     return (
