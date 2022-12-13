@@ -1,13 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Episode } from '../types'
 import { Table, Image, Checkbox } from 'semantic-ui-react'
 
 type Props = {
-    episodes: Episode|any
+    episodes: Episode | any
     searchInput: string
-    selectSpecies: { key: string; text: string; value: string; }[]
+    selectSpecies: any
 }
-const TableBody = ({ episodes, searchInput }: Props) => {
+const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
+
+    const [data, setData] = useState([...episodes])
+
+    useEffect(() => {
+        setData(episodes)
+    }, [episodes])
+
+    const filterHandler = () => {
+        if (!selectSpecies && searchInput) {
+            let characters = episodes.filter((el) => el.name.toLowerCase().includes(searchInput.toLowerCase()))
+            setData(characters)
+        } else if (selectSpecies && !searchInput) {
+            let characters = episodes.filter((el) => el.species.toLowerCase() === selectSpecies.toLowerCase())
+            setData(characters)
+        } else if (selectSpecies && searchInput) {
+            let characters = episodes
+                .filter((el) => el.species.toLowerCase() === selectSpecies.toLowerCase())
+                .filter((el) => el.name.toLowerCase().includes(searchInput.toLowerCase()))
+            setData(characters)
+        }
+    }
+    useEffect(() => {
+        filterHandler()
+    }, [selectSpecies, searchInput])
 
     return (
         <div className='table'>
@@ -22,8 +46,7 @@ const TableBody = ({ episodes, searchInput }: Props) => {
                         <Table.HeaderCell>Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                {episodes.filter((ep) => ep.name.toLowerCase().includes(searchInput))
-                    .map((episode) =>
+                {data.map((episode) =>
                         <Table.Row >
                             <Table.Cell><Checkbox /></Table.Cell>
                             <Table.Cell>{episode.name}

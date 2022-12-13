@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react"
 import Table from './table'
-import { Input, Dropdown, Grid } from 'semantic-ui-react'
+import { Input, Dropdown, Grid, Select } from 'semantic-ui-react'
 import { Episode } from "../types"
 type Props = {
     episodes: Episode
@@ -11,12 +11,16 @@ const Navbar = ({ episodes }: Props) => {
         { key: 'Human', text: 'Human', value: 'Human' },
         { key: 'Alien', text: 'Alien', value: 'Alien' },
     ]
-    const [selectSpecies, setSelectSpecies] = useState([])
+    const [selectSpecies, setSelectSpecies] = useState('')
     const [searchInput, setSearchInput] = useState('')
     
     const handlerSpeciesChange = (e, data) => {
         setSelectSpecies(data.value)
         console.log(data.value)
+    }
+    const handleSearchInput = (e) => {
+        setSearchInput(e.target.value)
+        console.log(e.target.value)
     }
     return (
         <div>
@@ -26,7 +30,7 @@ const Navbar = ({ episodes }: Props) => {
                         onChange={(e) => setSearchInput(e.target.value)} />
                 </Grid.Column>
                 <Grid.Column width={4}>
-                    <Dropdown onChange={handlerSpeciesChange} placeholder="Species"search selection 
+                    <Select onChange={handlerSpeciesChange} placeholder="Species"search selection 
                     options={option}/>
                 </Grid.Column>
             </Grid>
