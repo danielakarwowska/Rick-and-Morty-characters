@@ -26,18 +26,15 @@ const App = (): JSX.Element => {
     const indexOfFirstPost = indexOfLastPost - postsPerPage
     const currentPosts = episodes.slice(indexOfFirstPost, indexOfLastPost)
 
-    const paginate = (pageNumber) => {
-        setCurrentPage(pageNumber)
-    }
+    const nPages = Math.ceil(episodes.length / postsPerPage)
     return (
         <Layout>
             <h1>Characters</h1>
             <Navbar episodes={currentPosts} />
             <PaginationPages
-                postsPerPage={postsPerPage}
-                totalPosts={episodes.length}
-                paginate={paginate}
-            />
+                nPages={nPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage} />
         </Layout>
     )
 }

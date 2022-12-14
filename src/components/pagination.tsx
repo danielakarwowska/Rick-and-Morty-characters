@@ -1,24 +1,33 @@
 import React from "react"
+import { Pagination } from "semantic-ui-react"
 
 type Props = {
-    postsPerPage: number
-    totalPosts: number
-    paginate: number|any
+    nPages: number
+    currentPage: number
+    setCurrentPage: number| any
 }
-const PaginationPages = ({postsPerPage, totalPosts, paginate} :Props) => {
-const pageNumbers = []
-for(let i=1; i<=Math.ceil(totalPosts/postsPerPage); i++){
-    pageNumbers.push(i)
-}
-return(
-<nav>
-    <ul className="pagination">
-        {pageNumbers.map((number) => (
-            <li key={number} >
-                <a href="!#" className='page-link' onClick={() => paginate(number)}>{number}</a></li>
-        ))}
-    </ul>
-</nav>
-)
+const PaginationPages = ({ nPages, currentPage, setCurrentPage }: Props) => {
+    const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
+
+    return (
+        <>
+        <Pagination
+        boundaryRange={0}
+        defaultActivePage={1}
+        ellipsisItem={null}
+        firstItem={null}
+        lastItem={null}
+        siblingRange={1}
+        totalPages={10}
+      />
+        <ul>
+            {pageNumbers.map((pgNumber) => (
+                <li key={pgNumber}>
+                    <a onClick={() => setCurrentPage(pgNumber)}>{pgNumber}</a>
+                </li>
+            ))}
+        </ul>
+        </>
+    )
 }
 export default PaginationPages
