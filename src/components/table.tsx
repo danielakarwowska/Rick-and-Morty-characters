@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Episode } from '../types'
-import { Table, Image, Checkbox } from 'semantic-ui-react'
+import { Table, Image, Checkbox, Container, Icon } from 'semantic-ui-react'
 
 type Props = {
     episodes: Episode | any
     searchInput: string
-    selectSpecies: any
+    selectSpecies: string
 }
 const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
 
@@ -44,18 +44,38 @@ const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
                     <Table.HeaderCell>Status</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
-            {data.map((episode, index) =>
-                <Table.Row key={index}>
-                    <Table.Cell><Checkbox /></Table.Cell>
-                    <Table.Cell>{episode.name}
-                        <p>{episode.species}</p>
-                    </Table.Cell>
-                    <Table.Cell><Image size='tiny' avatar src={episode.image} /></Table.Cell>
-                    <Table.Cell>{episode.origin.name}</Table.Cell>
-                    <Table.Cell>{episode.gender}</Table.Cell>
-                    <Table.Cell>{episode.status}</Table.Cell>
-                </Table.Row>
-            )}
+            <Table.Body>
+                {data.map((episode, index) =>
+                    <Table.Row key={index}
+                        style={{ background: episode.status === 'Dead' ? "#F0F0F0" : "white" }}>
+                        <Table.Cell><Checkbox /></Table.Cell>
+                        <Table.Cell>{episode.name}
+                            <p>{episode.species}</p>
+                        </Table.Cell>
+                        <Table.Cell><Image size='tiny' circular src={episode.image}/></Table.Cell>
+                        <Table.Cell>{episode.origin.name}</Table.Cell>
+                        <Table.Cell>{episode.gender}</Table.Cell>
+                        <Table.Cell>
+                            {(() => {
+                                if (episode.status === 'Dead') {
+                                    return (
+                                        <Icon name="exclamation circle" color='red' />
+                                    )
+                                } else if (episode.status === 'Alive') {
+                                    return (
+                                        <Icon name="check circle" color='green' />
+                                    )
+                                } else {
+                                    return (
+                                        <Icon name='question circle' color='grey' />
+                                    )
+                                }
+                            })()}
+                            {episode.status}
+                        </Table.Cell>
+                    </Table.Row>
+                )}
+            </Table.Body>
         </Table>
     )
 }

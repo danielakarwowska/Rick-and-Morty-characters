@@ -11,7 +11,7 @@ const PaginationPages = ({ nPages, currentPage, setCurrentPage }: Props) => {
 
     return (
         <>
-        <Pagination
+        {/* <Pagination
         boundaryRange={0}
         defaultActivePage={1}
         ellipsisItem={null}
@@ -19,7 +19,7 @@ const PaginationPages = ({ nPages, currentPage, setCurrentPage }: Props) => {
         lastItem={null}
         siblingRange={1}
         totalPages={10}
-      />
+      /> */}
         <ul>
             {pageNumbers.map((pgNumber) => (
                 <li key={pgNumber}>

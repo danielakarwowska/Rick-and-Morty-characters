@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import Table from './table'
-import { Input, Dropdown, Grid, Select } from 'semantic-ui-react'
+import { Input, Grid, Select, Container } from 'semantic-ui-react'
 import { Episode } from "../types"
 type Props = {
     episodes: Episode
@@ -13,7 +13,7 @@ const Navbar = ({ episodes }: Props) => {
     ]
     const [selectSpecies, setSelectSpecies] = useState('')
     const [searchInput, setSearchInput] = useState('')
-    
+
     const handlerSpeciesChange = (e, data) => {
         setSelectSpecies(data.value)
         console.log(data.value)
@@ -23,23 +23,25 @@ const Navbar = ({ episodes }: Props) => {
         console.log(e.target.value)
     }
     return (
-        <div>
+        <Container>
             <Grid>
-                <Grid.Column width={4}>
-                    <Input icon='search' placeholder='Search'
-                        onChange={(e) => setSearchInput(e.target.value)} />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    <Select onChange={handlerSpeciesChange} placeholder="Species"search selection 
-                    options={option}/>
-                </Grid.Column>
+                <Grid.Row>
+                    <Grid.Column width={3}>
+                        <Input icon='search' placeholder='Search'
+                            onChange={(e) => setSearchInput(e.target.value)} />
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                        <Select onChange={handlerSpeciesChange} placeholder="Species" search selection
+                            options={option} />
+                    </Grid.Column>
+                </Grid.Row>
             </Grid>
             <Table
                 episodes={episodes}
                 searchInput={searchInput}
                 selectSpecies={selectSpecies}
-                 />
-        </div>
+            />
+        </Container>
     )
 }
 export default Navbar
