@@ -1,33 +1,29 @@
-import React from "react"
+import React, { useState } from "react"
 import { Pagination } from "semantic-ui-react"
+import { Episode } from "../types"
 
 type Props = {
     nPages: number
+    setCurrentPage: number | any
     currentPage: number
-    setCurrentPage: number| any
+    episodes
 }
-const PaginationPages = ({ nPages, currentPage, setCurrentPage }: Props) => {
-    const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
+
+const PaginationPages = ({ setCurrentPage, nPages, currentPage, episodes }: Props) => {
+
+    const pageNumbers = Array.from(Array(nPages + 1).keys()).slice(1)
+
+    const onPageChange = (e, pageInfo) => {
+        setCurrentPage(pageInfo.currentPage)
+        episodes('https://rickandmortyapi.com/api/character/?page=' + pageInfo.activePage.toString())
+    }
 
     return (
-        <>
-        {/* <Pagination
-        boundaryRange={0}
-        defaultActivePage={1}
-        ellipsisItem={null}
-        firstItem={null}
-        lastItem={null}
-        siblingRange={1}
-        totalPages={10}
-      /> */}
-        <ul>
-            {pageNumbers.map((pgNumber) => (
-                <li key={pgNumber}>
-                    <a onClick={() => setCurrentPage(pgNumber)}>{pgNumber}</a>
-                </li>
-            ))}
-        </ul>
-        </>
+        <Pagination
+        onPageChange={onPageChange}
+        activePage={currentPage}
+        totalPages={42}
+        ellipsisItem={null}/>
     )
 }
 export default PaginationPages

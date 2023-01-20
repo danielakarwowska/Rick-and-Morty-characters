@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Episode } from '../types'
-import { Table, Image, Checkbox, Container, Icon } from 'semantic-ui-react'
+import { Table, Image, Checkbox, Container, Icon, Pagination } from 'semantic-ui-react'
+import PaginationPages from './pagination'
 
 type Props = {
     episodes: Episode | any
@@ -9,7 +10,7 @@ type Props = {
 }
 const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
 
-    const [data, setData] = useState([...episodes])
+    const [data, setData] = useState<any>([...episodes])
 
     useEffect(() => {
         setData(episodes)

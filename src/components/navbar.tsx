@@ -18,10 +18,7 @@ const Navbar = ({ episodes }: Props) => {
         setSelectSpecies(data.value)
         console.log(data.value)
     }
-    const handleSearchInput = (e) => {
-        setSearchInput(e.target.value)
-        console.log(e.target.value)
-    }
+
     return (
         <Container>
             <Grid>
