@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Episode } from '../types'
-import { Table, Image, Checkbox, Container, Icon, Pagination } from 'semantic-ui-react'
-import PaginationPages from './pagination'
+import Paginations from '../components/paginations'
+import { Table, Image, Checkbox, Icon, Pagination } from 'semantic-ui-react'
 
 type Props = {
     episodes: Episode | any
     searchInput: string
     selectSpecies: string
+    postPerPage: number
 }
-const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
+const TableBody = ({ episodes, searchInput, selectSpecies, postPerPage }: Props) => {
 
     const [data, setData] = useState<any>([...episodes])
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const currentTableData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * postPerPage;
+        const lastPageIndex = firstPageIndex + postPerPage;
+        return episodes.slice(firstPageIndex, lastPageIndex);
+      }, [currentPage])
 
     useEffect(() => {
         setData(episodes)
@@ -34,6 +42,7 @@ const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
         filterHandler()
     }, [selectSpecies, searchInput])
     return (
+        <>
         <Table singleLine>
             <Table.Header>
                 <Table.Row>
@@ -46,7 +55,7 @@ const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {data.map((episode, index) =>
+                {currentTableData.map((episode, index) =>
                     <Table.Row key={index}
                         style={{ background: episode.status === 'Dead' ? "#F0F0F0" : "white" }}>
                         <Table.Cell><Checkbox /></Table.Cell>
@@ -78,6 +87,13 @@ const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
                 )}
             </Table.Body>
         </Table>
+        <Paginations
+        currentPage={currentPage}
+        totalCount={episodes.length}
+        postPerPage={postPerPage}
+        onPageChange={(page) => setCurrentPage(page)}
+    />
+        </>
     )
 }
 export default TableBody

@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import Layout from './components/layout'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from './components/navbar'
-import PaginationPages from './components/pagination'
+import PaginationPages from './components/usePagination'
 import { Episode } from './types'
-import { Header } from 'semantic-ui-react'
+
 const App = (): JSX.Element => {
+
   const [episodes, setEpisodes] = useState<Episode[] | any>([])
-  const [currentPage, setCurrentPage] = useState(1)
   const postsPerPage = 5
 
-  
   const fetchData = async (url) => {
     const res = await fetch(url)
     const result = await res.json()
@@ -24,21 +22,18 @@ const App = (): JSX.Element => {
     fetchData("https://rickandmortyapi.com/api/character");
   }, [])
 
-  const indexOfLastPost = currentPage * postsPerPage
-  const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentPosts = episodes.slice(indexOfFirstPost, indexOfLastPost)
-  const nPages = Math.ceil(episodes.length / postsPerPage)
-
   return (
-    <Layout>
-      <Header size='huge'>Characters</Header>
-      <Navbar episodes={currentPosts} />
-      <PaginationPages
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
-      nPages={nPages}
-      episodes={episodes}/>
-    </Layout>
+    <main>
+      <h1>Characters</h1>
+      <Navbar episodes={episodes}
+      postPerPage={postsPerPage}
+/>
+      {/* <PaginationPages
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        nPages={nPages}
+        episodes={episodes} /> */}
+    </main>
   )
 }
 
