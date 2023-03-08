@@ -1,12 +1,15 @@
 {
   "name": "exercise_website",
   "version": "1.0.0",
+  "homepage": "https://danielakarwowska.github.io/Rick-and-Morty-characters/",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "npx webpack --config ./webpack.prod.js",
     "local": "npx webpack --config ./webpack.dev.js",
-    "test": "npx jest"
+    "test": "npx jest",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -17,7 +20,6 @@
   "bugs": {
     "url": "https://github.com/danielakarwowska/exercise_website/issues"
   },
-  "homepage": "https://github.com/danielakarwowska/exercise_website#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "nanoid": "^3.3.1",
@@ -35,6 +37,7 @@
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "file-loader": "^6.2.0",
+    "gh-pages": "^5.0.0",
     "html-replace-webpack-plugin": "^2.6.0",
     "html-webpack-plugin": "^5.5.0",
     "jest-environment-jsdom": "^28.1.2",
