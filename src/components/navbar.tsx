@@ -4,10 +4,9 @@ import { Input, Grid, Select, Container } from 'semantic-ui-react'
 import { Episode } from "../types"
 type Props = {
     episodes: Episode
-    postPerPage: number
 }
 
-const Navbar = ({ episodes,postPerPage }: Props) => {
+const Navbar = ({ episodes }: Props) => {
     const option = [
         { key: 'Human', text: 'Human', value: 'Human' },
         { key: 'Alien', text: 'Alien', value: 'Alien' },
@@ -38,7 +37,6 @@ const Navbar = ({ episodes,postPerPage }: Props) => {
                 episodes={episodes}
                 searchInput={searchInput}
                 selectSpecies={selectSpecies}
-                postPerPage={postPerPage} 
          />
         </Container>
     )

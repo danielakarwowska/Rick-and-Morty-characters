@@ -1,28 +1,32 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react'
 import { Episode } from '../types'
-import Paginations from '../components/paginations'
 import { Table, Image, Checkbox, Icon, Pagination } from 'semantic-ui-react'
+import usePagination from '../hook/usePagination'
 
 type Props = {
     episodes: Episode | any
     searchInput: string
     selectSpecies: string
-    postPerPage: number
 }
-const TableBody = ({ episodes, searchInput, selectSpecies, postPerPage }: Props) => {
+const TableBody = ({ episodes, searchInput, selectSpecies }: Props) => {
 
-    const [data, setData] = useState<any>([...episodes])
-    const [currentPage, setCurrentPage] = useState(1)
-
-    const currentTableData = useMemo(() => {
-        const firstPageIndex = (currentPage - 1) * postPerPage;
-        const lastPageIndex = firstPageIndex + postPerPage;
-        return episodes.slice(firstPageIndex, lastPageIndex);
-      }, [currentPage])
+    const [data, setData] = useState<Episode[]>([...episodes])
 
     useEffect(() => {
         setData(episodes)
     }, [episodes])
+
+    const [page, setPage] = useState(1);
+    const postsPerPage = 5;
+    const count = Math.ceil(data.length / postsPerPage);
+
+    const _DATA = usePagination(!data ? episodes : data, postsPerPage);
+
+    const handleChangePagination = (e, index) => {
+        setPage(index.page)
+        console.log(index)
+        _DATA.jump(index)
+    }
 
     const filterHandler = () => {
         if (!selectSpecies && searchInput) {
@@ -43,56 +47,60 @@ const TableBody = ({ episodes, searchInput, selectSpecies, postPerPage }: Props)
     }, [selectSpecies, searchInput])
     return (
         <>
-        <Table singleLine>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell><Checkbox /></Table.HeaderCell>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Avatar</Table.HeaderCell>
-                    <Table.HeaderCell>Origin</Table.HeaderCell>
-                    <Table.HeaderCell>Gender</Table.HeaderCell>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {currentTableData.map((episode, index) =>
-                    <Table.Row key={index}
-                        style={{ background: episode.status === 'Dead' ? "#F0F0F0" : "white" }}>
-                        <Table.Cell><Checkbox /></Table.Cell>
-                        <Table.Cell>{episode.name}
-                            <p>{episode.species}</p>
-                        </Table.Cell>
-                        <Table.Cell><Image size='tiny' circular src={episode.image}/></Table.Cell>
-                        <Table.Cell>{episode.origin.name}</Table.Cell>
-                        <Table.Cell>{episode.gender}</Table.Cell>
-                        <Table.Cell>
-                            {(() => {
-                                if (episode.status === 'Dead') {
-                                    return (
-                                        <Icon name="exclamation circle" color='red' />
-                                    )
-                                } else if (episode.status === 'Alive') {
-                                    return (
-                                        <Icon name="check circle" color='green' />
-                                    )
-                                } else {
-                                    return (
-                                        <Icon name='question circle' color='grey' />
-                                    )
-                                }
-                            })()}
-                            {episode.status}
-                        </Table.Cell>
+            <Table singleLine>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell><Checkbox /></Table.HeaderCell>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Avatar</Table.HeaderCell>
+                        <Table.HeaderCell>Origin</Table.HeaderCell>
+                        <Table.HeaderCell>Gender</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                     </Table.Row>
-                )}
-            </Table.Body>
-        </Table>
-        <Paginations
-        currentPage={currentPage}
-        totalCount={episodes.length}
-        postPerPage={postPerPage}
-        onPageChange={(page) => setCurrentPage(page)}
-    />
+                </Table.Header>
+                <Table.Body>
+                    {episodes
+                        ? _DATA.currentData().map((item: any) =>
+                            <Table.Row key={item.name}
+                                style={{ background: item.status === 'Dead' ? "#F0F0F0" : "white" }}>
+                                <Table.Cell><Checkbox /></Table.Cell>
+                                <Table.Cell>{item.name}
+                                    <p>{item.species}</p>
+                                </Table.Cell>
+                                <Table.Cell><Image size='tiny' circular src={item.image} /></Table.Cell>
+                                <Table.Cell>{item.origin.name}</Table.Cell>
+                                <Table.Cell>{item.gender}</Table.Cell>
+                                <Table.Cell>
+                                    {(() => {
+                                        if (item.status === 'Dead') {
+                                            return (
+                                                <Icon name="exclamation circle" color='red' />
+                                            )
+                                        } else if (item.status === 'Alive') {
+                                            return (
+                                                <Icon name="check circle" color='green' />
+                                            )
+                                        } else {
+                                            return (
+                                                <Icon name='question circle' color='grey' />
+                                            )
+                                        }
+                                    })()}
+                                    {item.status}
+                                </Table.Cell>
+                            </Table.Row>
+                        ) : null}
+                </Table.Body>
+            </Table>
+            <footer className='pagination'>
+            <Pagination
+                count={count}
+                page={page}
+                ellipsisItem={2}
+                totalPages={count}
+                onPageChange={(e, index) => handleChangePagination(e, index)}
+            />
+            </footer>
         </>
     )
 }

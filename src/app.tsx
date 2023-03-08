@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './components/navbar'
-import PaginationPages from './components/usePagination'
 import { Episode } from './types'
 
 const App = (): JSX.Element => {
 
   const [episodes, setEpisodes] = useState<Episode[] | any>([])
-  const postsPerPage = 5
 
   const fetchData = async (url) => {
     const res = await fetch(url)
@@ -24,15 +22,9 @@ const App = (): JSX.Element => {
 
   return (
     <main>
-      <h1>Characters</h1>
+      <h1 className='characters_title'>Characters</h1>
       <Navbar episodes={episodes}
-      postPerPage={postsPerPage}
 />
-      {/* <PaginationPages
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        nPages={nPages}
-        episodes={episodes} /> */}
     </main>
   )
 }

@@ -1,5 +1,13 @@
 body {
     background-color: blue($color: #96b7d3);
-    text-align: center;
+    // text-align: center;
     padding: 2rem;
+}
+.characters_title{
+    margin-left: 5vh;
+    margin-top: 5vh!important;
+}
+.pagination{
+    display: flex;
+    justify-content: center;
 }
